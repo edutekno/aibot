@@ -1,3 +1,23 @@
+<!--
+    case "1":
+        $modelai = "mixtral-8x7b-32768";
+        break;
+    case "2":
+        $modelai = "llama2-70b-4096";
+        break;
+    case "3":
+        $modelai = "gemma-7b-it";
+        break;
+
+    default:
+        $modelai = "gemma-7b-it";
+}
+
+$role="You are named Muhammad Tamim, a learning  specializing in the academic topics, a learning partner. introduce in short words (no more than 20 words). Use bahasa Indonesia";
+//$role=$role.". Jelaskan anda menggunakan model AI ".$modelai;
+    $img="https://rumahguru.org/img/scholar.png";
+    break;
+-->
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,7 +29,7 @@
 		crossorigin="anonymous">
 	<script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script>
 	<script src="https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js"></script>
-	  <link rel="icon" type="image/x-icon" href="https://rumahguru.org/img/favicon.png">
+	
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 	<script src="https://rumahguru.org/api/data.js" defer></script>
 	<style>
@@ -111,9 +131,7 @@ th {
 			<div class="col-md-12 mb-3">
 				<div class="card text-white bg-gradient-secondary mt-3">
 		 	<div id="left" class="left" style="display:block;"><img src="https://rumahguru.org/img/scholar.png"  height="80"></div>
-		 	<!--
-		 	<div id="rightt" class="right" style="display:block;">	<a href="unduh.php?email=<?echo $nickname;?>&nickname=<?echo $nickname;?>" target="_blank"><button><b>Arsip</b></button></a></div>
-		 	-->
+		 	<div id="rightt" class="right" style="display:block;">	<a href="unduh.php?email=" target="_blank"><button><b>Arsip</b></button></a></div>
 		 	
 		 
 
@@ -172,6 +190,7 @@ sendButton.on("click", () => {
     //prompt.val() = userInput.val();
     document.getElementById('prompt').value= userInput.val();
     if (message) {
+        while (messages.length) { messages.pop(); } // delete semua history
         messages.push({
             "role": "user",
             "content": message 
@@ -214,28 +233,20 @@ userInput.on("keydown", (event) => {
 
 function fetchMessages() {
 	
-	//apiKey ="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";
-	apiKey ="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";
+	const apiKey ="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";
 
-//     let modelai="";
-//     modelai="google/palm-2-chat-bison-32k";
-//    modelai="google/gemini-pro";   
-//    modelai="perplexity/pplx-70b-chat";    
-//   modelai="meta-llama/Llama-2-70b-chat-hf";//moderate
-    //   modelai="anthropic/claude-3-haiku:beta";
-    //   modelai="google/gemma-7b-it"; //no
-    //   modelai="mistralai/Mixtral-8x7B-Instruct-v0.1";//no
+     let modelai="";
 
-   //    modelai="gryphe/mythomist-7b:free"; //mod
-   //    modelai="gpt-3.5-turbo-16k-0613";
-   
-   //    modelai="perplexity/sonar-small-chat";
-   //    modelai="mistralai/mixtral-8x7b-instruct";
+
+
+       modelai="llama3-70b-8192";
+       modelai="llama3-8b-8192";
+   //    modelai="gemma-7b-it";
+   //    modelai="mixtral-8x7b-32768";
 
       
-      modelai="gemma2-9b-it";
+      
 	//$("#apiKey").val();
-	console.log("Mpdel: "+modelai);
         var settings = {
             url: "https://api.groq.com/openai/v1/chat/completions",
             method: "POST",
@@ -253,6 +264,7 @@ function fetchMessages() {
         };
         $.ajax(settings).done(function(response) {
             const message = response.choices[0].message;
+            while (messages.length) { messages.pop(); }
             messages.push({
                 "role": message.role,
                 "content": message.content
@@ -267,20 +279,22 @@ function fetchMessages() {
             vprompt=prompt.val();
             //console.log(vprompt);
             var data = {
-                email: '<?php echo $nickname; ?>',
-                chatbot: '<?php echo $modelai; ?>',
+                email: '',
+                chatbot: modelai,
                 data1: vprompt,
                 data2: htmlText,
                 bot: 'tamimbot_eksperimen'
                 };
 
-            sendDataToPHP('save_data_ex.php', data, function(error, response) {
+       /*     sendDataToPHP('http://rumahguru.org/chats/save_data_ex.php', data, function(error, response) {
                 if (error) {
                     console.error(error);
                 } else {
                     console.log(response);
                 }
                 });
+            */
+            
             
         
         }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -296,11 +310,9 @@ function fetchMessages() {
         });
     }
 
-
-
 function myRole() {
-
-message ='Anda adalah asisten AI yang membantu Bp/Ibu guru dalam pekerjaannya. tawarkan guru untuk bertanya tentang apa yang perlu dibantu dalam tugas guru dalam pengajaran/pembelajaran (misal ttg kategori Tujuan/hasil/target Pembelajaran (TP), Aktivitas Pembelajaran (AP), penilaian/asesmen Pembelajaran (PP), pemahaman materi pelajaran (MP), psikologi/karakter siswa dan pengelolaan kelas, dll). Jika guru tidak memiliki pertanyaan, berikan beberapa contoh pertanyaan yang dapat diajukan guru ke AI (tulis dalam kategori dengan format bullet list dan berikan kode (huruf-angka, misal TP1,TP2, AP1,AP2 dst) pada setiap pertanyaan tsb. jika ingin memilih pertanyaan tsb, cukup dengan menuliskan kode pertanyaan dan AI akan menjawab pertanyaan dengan kode tsb.). tawarkan juga jika ingin bertanya untuk topik materi spesifik (3 pertanyaan) (misal terkait sains, matematika, bahasa dll). Agar konteks lebih tepat, tanyakan juga nama, mata-pelajaran yg diampu/diajarkan,jenjang mengajar';
+    alert("Hello! I am not save history chat.");
+    const message = "Selamat datang.. Use bahasa Indonesia";
  
     if (message) {
         messages.push({
@@ -312,13 +324,13 @@ message ='Anda adalah asisten AI yang membantu Bp/Ibu guru dalam pekerjaannya. t
 		const displaytext = window.markdownit().render(message);
 		let userMessageHtml = '<pre><div class="message right-side "  >' + displaytext + '</div></pre>';
 		let q='<pre><div class="message right-side "  >' + '<?echo $q?>' + '</div></pre>';
-		<?if (isset($_GET['q'])) // jika ada parameter q (prompt awal, maka tampilkan parameter ini)
+/*		<?if (isset($_GET['q'])) // jika ada parameter q (prompt awal, maka tampilkan parameter ini)
 {
 
 echo "chatbox.append(q);";
 echo 'chatbox.animate({ scrollTop: 20000000 }, "slow");';    
 }    ?>
-
+*/
         //chatbox.append(userMessageHtml);
 		//chatbox.animate({ scrollTop: 20000000 }, "slow");
         userInput.val("");
@@ -326,40 +338,6 @@ echo 'chatbox.animate({ scrollTop: 20000000 }, "slow");';
 		sendButton.prop("disabled", true);
 		document.getElementById("loading").style.display = "block";
         fetchMessages();
-    }
-    }
-
-
-function myRole2() {
-    const message = "<?echo $role?>";
-         // message="Anda adalah asisten AI yang membantu guru dalam pekerjaannya."+" tawarkan guru untuk bertanya tentang apa yang perlu dibantu dalam tugas guru dalam pengajaran/pembelajaran"+" Jika guru tidak memiliki pertanyaan, berikan 4 contoh pertanyaan yang dapat diajukan guru ke AI (berikan kode pada setiap pertanyaan tsb)";
-    if (message) {
-        messages.push({
-            "role": "user",
-            "content": message
-        });
-        
-        
-		const displaytext = window.markdownit().render(message);
-		let userMessageHtml = '<pre><div class="message right-side "  >' + displaytext + '</div></pre>';
-		let q='<pre><div class="message left-side"  >' + 'Halo! Selamat bergabung! '+'<?echo $q?>' + '</div></pre>';
-		<?
-		//if (isset($_GET['q'])) // jika ada parameter q (prompt awal, maka tampilkan parameter ini)
-{
-
-echo "chatbox.append(q);";
-echo 'chatbox.animate({ scrollTop: 20000000 }, "slow");';    
-}    ?>
-
-        //chatbox.append(userMessageHtml);
-		//chatbox.animate({ scrollTop: 20000000 }, "slow");
-	/*	
-        userInput.val("");
-        sendButton.val("Tunggu sebentar...");
-	sendButton.prop("disabled", true);
-	document.getElementById("loading").style.display = "block";
-        fetchMessages();
-        */
     }
     }
 
