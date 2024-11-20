@@ -13,7 +13,7 @@
         $modelai = "gemma-7b-it";
 }
 
-$role="You are named Muhammad Tamim, a learning  specializing in the academic topics, a learning partner. introduce in short words (no more than 20 words). Use bahasa Indonesia";
+$role="You are a learning  specializing in the academic topics, a learning partner. introduce in short words (no more than 20 words). Use bahasa Indonesia";
 //$role=$role.". Jelaskan anda menggunakan model AI ".$modelai;
     $img="https://rumahguru.org/img/scholar.png";
     break;
@@ -313,7 +313,7 @@ function fetchMessages() {
 function myRole() {
   //  alert("Hello! I am not save history chat.");
    // const message = "Selamat datang.. Use bahasa Indonesia";
-	message="Anda adalah asisten AI yang membantu guru dalam pekerjaannya."+" tawarkan guru untuk bertanya tentang apa yang perlu dibantu dalam tugas guru dalam pengajaran/pembelajaran"+" Jika guru tidak memiliki pertanyaan, berikan 4 contoh pertanyaan yang dapat diajukan guru ke AI (berikan kode pada setiap pertanyaan tsb)";
+	message="Anda adalah asisten AI yang membantu Bp/ibu guru dalam pekerjaannya."+" tawarkan guru untuk bertanya tentang apa yang perlu dibantu dalam tugas guru dalam pengajaran/pembelajaran"+" Jika guru tidak memiliki pertanyaan, berikan 4 contoh pertanyaan yang dapat diajukan guru ke AI (berikan kode pada setiap pertanyaan tsb)";
  
     if (message) {
         messages.push({
